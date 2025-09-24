@@ -47,7 +47,7 @@ INVITE_CODE=VCM1MZ
 
 Menjalankan Bot
 ```bash
-Menjalankan Bot
+node index.js
 ```
 
 Bot akan:
