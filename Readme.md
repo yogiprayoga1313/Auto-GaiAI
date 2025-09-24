@@ -18,11 +18,11 @@ Bot otomatis login, daily check-in, dan membuat AI task di GAIAI menggunakan wal
 
 1. Clone repository:
 ```bash
-git clone <repo-url>
+git clone https://github.com/yogiprayoga1313/Auto-GaiAI.git
 ```
 
 ```bash
-cd <repo-folder>
+cd Auto-GaiAI
 ```
 
 Install dependencies:
