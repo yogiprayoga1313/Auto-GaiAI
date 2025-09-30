@@ -1,3 +1,4 @@
+// ...existing code...
 require('dotenv').config();
 const axios = require('axios');
 const { ethers } = require('ethers');
@@ -106,7 +107,7 @@ function printProfile(profile) {
 
 function printCreations(creations) {
     if (!creations || creations.length === 0) {
-        console.log(chalk.yellow('No creations found today.'));
+        console.log(chalk.yellow('No creations found.'));
         return;
     }
     const table = new Table({
@@ -122,7 +123,7 @@ function printCreations(creations) {
             c.createdAt
         ]);
     });
-    console.log(chalk.green('\n=== Today\'s AI Creations ==='));
+    console.log(chalk.green('\n=== AI Creations ==='));
     console.log(table.toString());
 }
 
@@ -197,19 +198,18 @@ async function runFlow() {
     const dailyRes = await callAuthPost('/api/v1/gaiai-sign', token, {});
     console.log(chalk.green(`✅ Daily check-in: ${dailyRes?.data?.gPoints || '-'} gPoints`));
 
-    console.log(chalk.cyan('\n5) Fetching today\'s creations...'));
+    console.log(chalk.cyan('\n5) Fetching existing creations...'));
     let creationsRes = await callAuthGet('/api/v2/gaiai-user/creations?page=1&pageSize=99999', token);
     let creations = creationsRes?.data || [];
+    printCreations(creations);
 
-    // tanya user untuk prompt sebelum create-task
-    if (creations.length === 0) {
-        const userPrompt = await askPrompt('jokowi');
-        await createTaskWithCheck(token, userPrompt, 3, 5000);
+    // === Selalu tanya prompt & generate task baru ===
+    const userPrompt = await askPrompt('jokowi');
+    await createTaskWithCheck(token, userPrompt, 3, 5000);
 
-        // fetch ulang creations untuk menampilkan
-        creationsRes = await callAuthGet('/api/v2/gaiai-user/creations?page=1&pageSize=99999', token);
-        creations = creationsRes?.data || [];
-    }
+    // fetch ulang creations untuk menampilkan hasil terbaru
+    creationsRes = await callAuthGet('/api/v2/gaiai-user/creations?page=1&pageSize=99999', token);
+    creations = creationsRes?.data || [];
 
     printCreations(creations);
 }
